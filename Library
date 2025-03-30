@@ -1,1 +1,106 @@
+import java.util.*;
+
+	class Book {
+	    private int bookId;
+	    private String title;
+	    private String author;
+	    private boolean isIssued;
+	    private static List<Book> bookList = new ArrayList<>();
+	    private static Map<Integer, Boolean> users = new HashMap<>();
+	    private static Queue<Book> requestQueue = new LinkedList<>();
+
+	    public Book(int bookId, String title, String author) {
+	        this.bookId = bookId;
+	        this.title = title;
+	        this.author = author;
+	        this.isIssued = false;
+	    }
+
+	    public int getBookId() {
+	        return bookId;
+	    }
+
+	    public String getTitle() {
+	        return title;
+	    }
+
+	    public String getAuthor() {
+	        return author;
+	    }
+
+	    public boolean isIssued() {
+	        return isIssued;
+	    }
+
+	    public void setIssued(boolean issued) {
+	        isIssued = issued;
+	    }
+
+	    public static void addBook(int id, String title, String author) {
+	        bookList.add(new Book(id, title, author));
+	        System.out.println("Book added successfully.");
+	    }
+
+	    public static void registerUser(int userId) {
+	        if (!users.containsKey(userId)) {
+	            users.put(userId, true);
+	            System.out.println("User registered successfully.");
+	        } else {
+	            System.out.println("User already exists.");
+	        }
+	    }
+
+	    public static void displayBooks() {
+	        if (bookList.isEmpty()) {
+	            System.out.println("No books available.");
+	            return;
+	        }
+	        System.out.println("Available Books:");
+	        for (Book book : bookList) {
+	            System.out.println("ID: " + book.getBookId() + ", Title: " + book.getTitle() + ", Author: " + book.getAuthor() + ", Issued: " + book.isIssued());
+	        }
+	    }
+
+	    public static void issueBook(int bookId, int userId) {
+	        if (!users.containsKey(userId)) {
+	            System.out.println("User not registered.");
+	            return;
+	        }
+	        for (Book book : bookList) {
+	            if (book.getBookId() == bookId && !book.isIssued()) {
+	                book.setIssued(true);
+	                System.out.println("Book issued successfully.");
+	                return;
+	            }
+	        }
+	        System.out.println("Book not available or already issued.");
+	    }
+
+	    public static void returnBook(int bookId) {
+	        for (Book book : bookList) {
+	            if (book.getBookId() == bookId && book.isIssued()) {
+	                book.setIssued(false);
+	                System.out.println("Book returned successfully.");
+	                return;
+	            }
+	        }
+	        System.out.println("Invalid book ID or book not issued.");
+	    }
+
+	    public static void requestBook(int bookId, String author) {
+	        requestQueue.add(new Book(bookId, "Requested Book", author));
+	        System.out.println("Book request placed successfully.");
+	    }
+
+	    public static void processRequests() {
+	        if (requestQueue.isEmpty()) {
+	            System.out.println("No pending requests.");
+	            return;
+	        }
+	        while (!requestQueue.isEmpty()) {
+	            Book requestedBook = requestQueue.poll();
+	            System.out.println("Processing request for book: " + requestedBook.getTitle() + " by " + requestedBook.getAuthor());
+	        }
+	    }
+	}
 
